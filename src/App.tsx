@@ -115,7 +115,7 @@ export default () => {
               <Translation path="tabs.addEntry"/>
             </IonLabel>
           </IonTabButton>
-          <IonTabButton tab="highlights" href="/mood/highlights">
+          <IonTabButton disabled tab="highlights" href="/mood/highlights">
             <IonIcon icon={statsChart} />
             <IonLabel>
               <Translation path="tabs.highlights"/>

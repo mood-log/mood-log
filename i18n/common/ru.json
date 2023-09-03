@@ -42,6 +42,9 @@
         "data": "Данные",
         "importData": "Импорт данных",
         "exportData": "Экспорт данных",
+        "about": "О программе",
+        "githubRepository": "GitHub репозиторий",
+        "reportBug": "Сообщить об ошибке",
         "version": "Версия"
     },
     "languages": {

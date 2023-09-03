@@ -42,6 +42,9 @@
         "data": "Data",
         "importData": "Import Data",
         "exportData": "Export Data",
+        "about": "About",
+        "githubRepository": "GitHub Repository",
+        "reportBug": "Report a Bug",
         "version": "Version"
     },
     "languages": {

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import StorageContext from "../models/StorageContext";
 import "./SettingsPage.css";
 import * as json from "../../package.json";
-import { contrastOutline, logInOutline, logOutOutline, refreshOutline, trashOutline } from "ionicons/icons";
+import { bug, contrastOutline, logInOutline, logOutOutline, logoGithub, refreshOutline, trashOutline } from "ionicons/icons";
 import SettingsService from "../services/SettingsService";
 import { Translation, useTranslation, useTranslationChange } from "i18nano";
 import Settings from "../models/Settings";
@@ -95,14 +95,14 @@ export default () => {
 
     return (
         <IonPage className="settings">
-            <IonHeader>
+            <IonHeader translucent>
                 <IonToolbar>
                     <IonTitle>
                         <Translation path="tabs.settings" />
                     </IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent className="ion-padding-vertical">
+            <IonContent fullscreen className="ion-padding-vertical">
                 <IonNote className="ion-padding-start ion-margin-start ion-text-uppercase">
                     <Translation path="settings.language" />
                 </IonNote>
@@ -156,6 +156,23 @@ export default () => {
                             <Translation path="actions.deleteAllData" />
                         </IonLabel>
                         { renderEraseDataAlert() }
+                    </IonItem>
+                </IonList>
+                <IonNote className="ion-padding-start ion-margin-start ion-text-uppercase">
+                    <Translation path="settings.about" />
+                </IonNote>
+                <IonList inset={true}>
+                    <IonItem button detail={false} color="light" href="https://github.com/mood-log/mood-log.github.io" target="_blank">
+                        <IonIcon slot="start" icon={logoGithub} />
+                        <IonLabel>
+                            <Translation path="settings.githubRepository" />
+                        </IonLabel>
+                    </IonItem>
+                    <IonItem button detail={false} color="light" href="https://github.com/mood-log/mood-log.github.io/issues/new" target="_blank">
+                        <IonIcon slot="start" icon={bug} />
+                        <IonLabel>
+                            <Translation path="settings.reportBug" />
+                        </IonLabel>
                     </IonItem>
                 </IonList>
                 <div className="ion-text-center">
