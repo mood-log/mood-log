@@ -1,8 +1,6 @@
-import QuadraticBezierCurve from './geometry/QuadraticBezierCurve';
 import ColorService from '../../services/ColorService';
-import Circle from './geometry/Circle';
-import MoodIconWave from './MoodIconWave';
 import './MoodIcon.css';
+import { getMoodIconCurve, getMoodIconGradientCurve } from './MoodIconPath';
 
 interface Props {
     mood: number;
@@ -12,41 +10,41 @@ interface Props {
 }
 
 export default function MoodIcon({ mood, animate = false, width = '100px', height = '100px'}: Props) {
-    const canvasSize = 200;
-    const iconRadius = canvasSize / 5;
-    const iconScale = 1 - Math.abs(mood) / 400;
-    const iconAngle = mood < 0 ? '.4rad' : '.3rad';
-    const pointsCount = mood < 0 ? 8 : 5;
-    const controlValue = mood < 0 
-        ? 0.15 - mood / 100 
-        : 0.40 + mood / 100;
-
-    const points = Circle.getPoints({ x: canvasSize / 2, y: canvasSize / 2 }, iconRadius, pointsCount);
-    const path = QuadraticBezierCurve.fromPoints(points, controlValue * iconRadius).path;
-
     if (isNaN(mood)) {
-        return <svg viewBox={`0 0 ${canvasSize} ${canvasSize}`} width={width} height={height} />
+        return <svg viewBox='-100 -100 200 200' width={width} height={height} />
     }
 
-    const gradient = (
-        <defs>
-            <radialGradient id="gradient" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="35%" fx="50%" fy="50%">
-                <stop offset="0" stopColor={ColorService.primaryHex(mood)} />
-                <stop offset="0.75" stopColor={ColorService.secondaryHex(mood)} />
-            </radialGradient>
-        </defs>
-    );
+    const path = getMoodIconCurve({ x: 0, y: 0}, 50, mood).path;
+    const gradientPath = getMoodIconGradientCurve({ x: 0, y: 0}, 50, mood).path;
 
-    const waves = [1, 2, 3].map(index => <MoodIconWave {...{index, mood, path, animate}} />);
+    const waveClass = (index: number) => `wave wave${index} ${animate ? 'animate' : ''}`;
+    const rotateWaveAngle = (index: number) => mood < -50 ? (mood + 50) / 10 * index : 0;
+    const rotateWave = (index: number) => `rotate(${rotateWaveAngle(index)}deg)`;
 
     return (
-        <svg className="mood-icon" viewBox={`0 0 ${canvasSize} ${canvasSize}`} width={width} height={height}>
-            { gradient }
-            <g style={{transformOrigin: '50% 50%', transform: `scale(${iconScale}) rotate(${iconAngle})`}}>
-                { waves }
-                <path d={path} fill="url(#gradient)" stroke={ColorService.secondaryHex(mood)} />
-                <path d={path} fill={ColorService.secondaryHex(mood)} className="small" />
-            </g>
+        <svg className="mood-icon" viewBox='-100 -100 200 200' width={width} height={height}>
+            <defs>
+                <filter id="f1" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="12" />
+                </filter>
+                <radialGradient id="g1">
+                    <stop offset="75%" stop-color={ColorService.primaryHex(mood)} />
+                    <stop offset="100%" stop-color={ColorService.secondaryHex(mood)} />
+                </radialGradient>
+                <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color={ColorService.primaryHex(mood)} />
+                    <stop offset="50%" stop-color={ColorService.secondaryHex(mood)} />
+                    <stop offset="100%" stop-color={ColorService.primaryHex(mood)} />
+                </linearGradient>
+            </defs>
+            {[1,2,3].map(i => 
+                <g className={waveClass(i)} key={i}>
+                    <path style={{transform: rotateWave(i)}} d={path} fill='url(#g1)' stroke='url(#g2)' />
+                </g>
+            )}
+            <path d={path} fill={ColorService.secondaryHex(mood)} stroke='url(#g2)' />
+            <path d={gradientPath} fill={ColorService.primaryHex(mood)} style={{transform: 'scale(0.6)'}} filter='url(#f1)' />
+            <path d={path} fill={ColorService.secondaryHex(mood)} style={{transform: 'scale(0.1)'}} />
         </svg>
     );
 }

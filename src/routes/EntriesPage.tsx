@@ -30,13 +30,15 @@ export default () => {
     return result;
   }
 
+  const handleScroll = async () => {
+    if (scrollRef.current && scrollRef.current.scrollLeft === 0) {
+      scrollRef.current.removeEventListener('scroll', handleScroll);
+      await loadCards();
+    }
+  }
+
   useEffect(() => {
-    const handleScroll = async () => {
-      if (scrollRef.current && scrollRef.current.scrollLeft === 0) {
-        scrollRef.current.removeEventListener('scroll', handleScroll);
-        await loadCards();
-      }
-    };
+    cardRef.current?.scrollIntoView({ behavior: 'instant', inline: 'start' });
 
     if (scrollRef.current) {
       scrollRef.current.addEventListener('scroll', handleScroll);
@@ -47,7 +49,7 @@ export default () => {
         scrollRef.current.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [scrollRef, cards]);
+  }, [scrollRef, cards.length]);
 
   useEffect(() => {
     loadCards();
@@ -57,10 +59,6 @@ export default () => {
     entryService.subscribe(update);
     return () => entryService.unsubscribe(update);
   }, [cards]);
-
-  useEffect(() => {
-    cardRef.current?.scrollIntoView({ behavior: 'instant', inline: 'start' });
-  }, [cards.length]);
 
   const loadCards = async () => {
     const newCards: DaySummaryCardProps[] = [];

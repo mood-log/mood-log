@@ -7,6 +7,7 @@ import MoodIcon from "../../MoodIcon/MoodIcon";
 import MoodInput from "../../MoodInput/MoodInput";
 import AddEntryModalStep from "../AddEntryModalStep";
 import AddFeelingsPage from "./AddFeelingsPage";
+import ColorService from "../../../services/ColorService";
 
 
 interface Props {
