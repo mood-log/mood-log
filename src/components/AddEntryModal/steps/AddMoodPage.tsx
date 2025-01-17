@@ -7,34 +7,26 @@ import MoodIcon from "../../MoodIcon/MoodIcon";
 import MoodInput from "../../MoodInput/MoodInput";
 import AddEntryModalStep from "../AddEntryModalStep";
 import AddFeelingsPage from "./AddFeelingsPage";
-import ColorService from "../../../services/ColorService";
 
 
 interface Props {
     close: () => void;
     save: (entry: Entry) => Promise<void>;
     entry: Entry;
+    prevTitle: string;
 }
 
-export default ({entry, close, save}: Props) => {
-    const initialDate = entry.date ?? new Date();
-    const timeZoneOffset = (new Date()).getTimezoneOffset() * 60000;
-    const isoDate = (new Date(initialDate.getTime() - timeZoneOffset)).toISOString().slice(0, -1);
-    const [date, setDate] = useState<string>(isoDate);
+export default ({entry, close, prevTitle, save}: Props) => {
     const [mood, setMood] = useState(entry.mood ?? 0);
     const title = 'modal.mood';
-    const nextComponent = <AddFeelingsPage {...{close, save, prevTitle: title, entry: {...entry, mood, date: new Date(date)}}} />;
+    const nextComponent = <AddFeelingsPage {...{close, save, prevTitle: title, entry: {...entry, mood}}} />;
     const footer = <MoodInput mood={mood} setMood={setMood} className="ion-padding-horizontal" />;
 
     return (
-        <AddEntryModalStep {...{footer, nextComponent, title, mood, close}}>
+        <AddEntryModalStep {...{footer, nextComponent, prevTitle, title, mood, close}}>
             <IonCardTitle className="ion-padding-top ion-text-center">
                 <Translation path="modal.howDidYouFeelAtThatMoment" />
             </IonCardTitle>
-            <IonDatetimeButton className="ion-padding-top" datetime="datetime" id="datetime-button" />
-            <IonPopover keepContentsMounted={true} trigger="datetime-button">
-                <IonDatetime id="datetime" style={{borderRadius: '12px'}} size="cover" preferWheel={true} value={date} max={isoDate} onIonChange={({detail}) => setDate(detail.value as string)} />
-            </IonPopover>
             <MoodIcon mood={mood} width="100%" height="calc(100% - 132px)" animate={true} />
         </AddEntryModalStep>
     );

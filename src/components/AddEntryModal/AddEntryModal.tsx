@@ -4,6 +4,7 @@ import Entry from "../../models/entry/Entry";
 import EntryService from "../../services/EntryService";
 import StorageContext from "../../models/StorageContext";
 import AddMoodPage from "./steps/AddMoodPage";
+import AddTypePage from "./steps/AddTypePage";
 
 interface Props {
     presentingElement: HTMLElement; 
@@ -30,7 +31,7 @@ export default ({presentingElement, isOpen, close}: Props) => {
 
     return (
         <IonModal {...{ref, isOpen, presentingElement, onDidDismiss, canDismiss}}>
-            <IonNav root={() => <AddMoodPage {...{entry, close, save}} />} />
+            <IonNav root={() => <AddTypePage {...{entry, close, save}} />} />
         </IonModal>
     );
 };

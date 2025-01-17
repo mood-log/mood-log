@@ -27,6 +27,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './App.css';
 
 import StorageContext from './models/StorageContext';
 import { Translation, useTranslationChange } from 'i18nano';
